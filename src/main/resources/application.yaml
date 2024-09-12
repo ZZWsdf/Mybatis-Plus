@@ -11,3 +11,6 @@ logging:
     dateformat: HH:mm:ss
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.itheima.mp.po

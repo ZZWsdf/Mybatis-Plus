@@ -93,4 +93,16 @@ class UserMapperTest {
         userMapper.update(null,wrapper);
 
     }
+    @Test
+    void testCustomSqlUpdate(){
+        //1.更新条件
+        List<Long> ids=List.of(1L,2L,4L);
+        int amount =200;
+        //2.定义条件
+        QueryWrapper<User> queryWrapper=new QueryWrapper<User>()
+                .in("id",ids);
+        //3.调用自定义SQL方法
+        userMapper.updateBalanceByIds(queryWrapper,amount);
+
+    }
 }

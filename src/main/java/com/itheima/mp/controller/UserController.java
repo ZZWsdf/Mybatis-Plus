@@ -50,4 +50,9 @@ public class UserController {
         //把PO拷贝到VO
         return BeanUtil.copyToList(users,UserVO.class);
     }
+    @ApiOperation("扣减用户余额接口")
+    @DeleteMapping("{id}/deduction/{money}")
+    public void deductMoneyById(@ApiParam("用户id") @PathVariable("id") Long id,@ApiParam("扣减的金额") @PathVariable("money") Integer money){
+        userService.deductBalance(id,money);
+    }
 }

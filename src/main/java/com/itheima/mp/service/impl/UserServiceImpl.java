@@ -6,6 +6,8 @@ import com.itheima.mp.mapper.UserMapper;
 import com.itheima.mp.service.IUserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Override
@@ -22,5 +24,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         //4.扣除余额update tb_user set balance=balance-{money}
         baseMapper.deductBalance(id,money);
+    }
+
+    @Override
+    public List<User> queryUsers(String name, Integer status, Integer maxBalance, Integer minBalance) {
+        List<User> list = lambdaQuery()
+                .like(name != null, User::getUsername, name)
+                .eq(status != null, User::getStatus, status)
+                .le(maxBalance != null, User::getBalance, maxBalance)
+                .ge(minBalance != null, User::getBalance, minBalance)
+                .list();
+
+
+        return list;
     }
 }

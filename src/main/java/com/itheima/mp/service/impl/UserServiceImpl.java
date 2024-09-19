@@ -5,12 +5,14 @@ import com.itheima.mp.domain.po.User;
 import com.itheima.mp.mapper.UserMapper;
 import com.itheima.mp.service.IUserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Override
+    @Transactional
     public void deductBalance(Long id, Integer money) {
         //1.查询用户
         User user = this.getById(id);
@@ -23,7 +25,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             throw new RuntimeException("用户余额不足");
         }
         //4.扣除余额update tb_user set balance=balance-{money}
-        baseMapper.deductBalance(id,money);
+//        baseMapper.deductBalance(id,money);
+        int remainBalance= user.getBalance()-money;
+        lambdaUpdate()
+                .set(User::getBalance,remainBalance)
+                .set(remainBalance==0,User::getStatus,2)
+                .eq(User::getId,id)
+                .update();
     }
 
     @Override
